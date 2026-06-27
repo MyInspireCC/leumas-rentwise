@@ -87,7 +87,7 @@ export function CreateListingPageContent() {
       const uploadJson = await uploadRes.json();
 
       if (!uploadJson.success || !uploadJson.url) {
-        throw new Error("Failed to upload image");
+        throw new Error(uploadJson.error ?? "Failed to upload image");
       }
 
       const res = await createListing({

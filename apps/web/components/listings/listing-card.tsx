@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Heart, MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { FeatureTag } from "@/components/listings/feature-tag";
+import { ListingImage } from "@/components/listings/listing-image";
 import { PriceDisplay } from "@/components/listings/price-display";
 import { VerifiedBadge } from "@/components/listings/verified-badge";
 import { Icon } from "@/components/shared/icon";
@@ -53,7 +53,7 @@ export function ListingCard({
           className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-lg bg-background shadow-[var(--shadow-card)] transition hover:scale-[1.01] hover:shadow-md"
         >
           <div className="relative aspect-[4/3] w-full overflow-hidden">
-            <Image
+            <ListingImage
               src={listing.image}
               alt={listing.title}
               fill
@@ -107,7 +107,7 @@ export function ListingCard({
       )}
     >
       <div className="relative aspect-[4/3] max-h-52 w-full overflow-hidden sm:max-h-56">
-        <Image
+        <ListingImage
           src={listing.image}
           alt={listing.title}
           fill

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, MapPin } from "lucide-react";
 
+import { ListingImage } from "@/components/listings/listing-image";
 import { Icon } from "@/components/shared/icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +36,7 @@ export function InspectionRequestCard({
       )}
     >
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-md sm:w-40">
-        <Image
+        <ListingImage
           src={inspection.listing.image}
           alt={inspection.listing.title}
           fill

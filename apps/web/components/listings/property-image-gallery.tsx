@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { LayoutGrid } from "lucide-react";
 
+import { ListingImage } from "@/components/listings/listing-image";
 import { Icon } from "@/components/shared/icon";
 import { Button } from "@/components/ui/button";
+import { getListingImageSrc } from "@/lib/listings/listing-image";
 
 type PropertyImageGalleryProps = {
   images: string[];
@@ -10,12 +11,13 @@ type PropertyImageGalleryProps = {
 };
 
 export function PropertyImageGallery({ images, title }: PropertyImageGalleryProps) {
-  const [mainImage, ...sideImages] = images;
+  const resolvedImages = images.map((image) => getListingImageSrc(image));
+  const [mainImage, ...sideImages] = resolvedImages;
 
   return (
     <div className="grid h-[280px] grid-cols-1 gap-2 overflow-hidden rounded-lg sm:h-[360px] md:grid-cols-3 md:h-[420px]">
       <div className="relative md:col-span-2">
-        <Image
+        <ListingImage
           src={mainImage}
           alt={title}
           fill
@@ -36,8 +38,8 @@ export function PropertyImageGallery({ images, title }: PropertyImageGalleryProp
 
       <div className="hidden grid-rows-2 gap-2 md:grid">
         {sideImages.slice(0, 2).map((image, index) => (
-          <div key={`${image}-${index}`} className="relative min-h-0">
-            <Image
+          <div key={`${image.slice(0, 32)}-${index}`} className="relative min-h-0">
+            <ListingImage
               src={image}
               alt={`${title} view ${index + 2}`}
               fill

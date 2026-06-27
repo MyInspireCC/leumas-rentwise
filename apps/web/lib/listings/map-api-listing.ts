@@ -1,6 +1,7 @@
 import type { AmenityIconKey } from "@/lib/constants/mock-listings";
 import type { ListingDetail } from "@/lib/constants/mock-listing-details";
 import type { MockListing } from "@/lib/constants/mock-listings";
+import { getListingImageSrc } from "@/lib/listings/listing-image";
 
 export type ApiListing = {
   id: string;
@@ -91,7 +92,7 @@ export function mapApiListingToCard(listing: ApiListing): MockListing {
     badgeType: listing.isVerified
       ? ("verified" as const)
       : ("pending" as const),
-    image: listing.image,
+    image: getListingImageSrc(listing.image),
     filterAmenities: inferFilterAmenities(listing),
   };
 
@@ -131,7 +132,7 @@ export function mapApiListingToDetail(listing: ApiListing): ListingDetail {
     bathroomsLabel: String(listing.bathrooms),
     sqft,
     images: [
-      listing.image,
+      getListingImageSrc(listing.image),
       "/images/listings/listing-2.jpg",
       "/images/listings/listing-3.jpg",
     ],
@@ -146,7 +147,7 @@ export function mapApiListingToDetail(listing: ApiListing): ListingDetail {
       rating: 4.8,
       reviewCount: 12,
       yearsHosting: 2,
-      image: listing.image,
+      image: getListingImageSrc(listing.image),
     },
   };
 }

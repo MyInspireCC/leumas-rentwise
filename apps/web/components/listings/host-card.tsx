@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Star } from "lucide-react";
 
+import { ListingImage } from "@/components/listings/listing-image";
 import { VerifiedBadge } from "@/components/listings/verified-badge";
 import { Icon } from "@/components/shared/icon";
 import type { ListingHost } from "@/lib/constants/mock-listing-details";
@@ -21,7 +21,7 @@ export function HostCard({ host, className }: HostCardProps) {
     >
       <div className="flex items-start gap-4">
         <div className="relative size-14 shrink-0 overflow-hidden rounded-full">
-          <Image
+          <ListingImage
             src={host.image}
             alt={host.name}
             fill

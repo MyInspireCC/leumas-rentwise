@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { ListingImage } from "@/components/listings/listing-image";
 import { PriceDisplay } from "@/components/listings/price-display";
 import type { ListingDetail } from "@/lib/constants/mock-listing-details";
 import { cn } from "@/lib/utils";
@@ -21,7 +20,7 @@ export function PropertySummaryCard({
       )}
     >
       <div className="relative aspect-[16/10] w-full">
-        <Image
+        <ListingImage
           src={listing.images[0]}
           alt={listing.title}
           fill
