@@ -1,0 +1,96 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["rentwise_web"]
+}
+
+enum RwUserRole {
+  agent
+  user
+
+  @@schema("rentwise_web")
+}
+
+enum RwInspectionStatus {
+  pending
+  completed
+  confirmed
+
+  @@schema("rentwise_web")
+}
+
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        RwUserRole   @default(user)
+  phone       String?
+  company     String?
+  experience  String?
+  location    String?
+  isVerified  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  listings    Listing[]
+  inspections Inspection[]
+
+  @@map("users")
+  @@schema("rentwise_web")
+}
+
+model Listing {
+  id            String       @id @default(uuid())
+  title         String
+  location      String
+  price         Int
+  bedrooms      Int
+  bathrooms     Float
+  size          Int?
+  description   String?
+  amenities     String[]     @default([])
+  image         String
+  serviceCharge Int?
+  agencyFee     Int?
+  isVerified    Boolean      @default(false)
+  agentId       String
+  createdAt     DateTime     @default(now())
+  agent         User         @relation(fields: [agentId], references: [id])
+  inspections   Inspection[]
+
+  @@map("listings")
+  @@schema("rentwise_web")
+}
+
+model Inspection {
+  id        String             @id @default(uuid())
+  listingId String
+  userId    String
+  date      String
+  timeSlot  String
+  addOn     Boolean            @default(false)
+  status    RwInspectionStatus @default(pending)
+  createdAt DateTime           @default(now())
+  listing   Listing            @relation(fields: [listingId], references: [id])
+  user      User               @relation(fields: [userId], references: [id])
+  payments  Payment[]
+
+  @@map("inspections")
+  @@schema("rentwise_web")
+}
+
+model Payment {
+  id           String     @id @default(uuid())
+  inspectionId String
+  amount       Int
+  status       String
+  createdAt    DateTime   @default(now())
+  inspection   Inspection @relation(fields: [inspectionId], references: [id])
+
+  @@map("payments")
+  @@schema("rentwise_web")
+}

@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String       @id @default(uuid())
+  name            String
+  email           String       @unique
+  phone           String?      @unique
+  password        String
+  role            Role         @default(TENANT)
+  isEmailVerified Boolean      @default(false)
+  isPhoneVerified Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  inspections     Inspection[]
+  listings        Listing[]
+  payments        Payment[]
+
+  @@map("users")
+}
+
+model Listing {
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  price       Int
+  location    String
+  images      String[]
+  status      String       @default("PENDING")
+  ownerId     String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  inspections Inspection[]
+  owner       User         @relation(fields: [ownerId], references: [id])
+}
+
+model Inspection {
+  id            String                  @id @default(uuid())
+  tenantId      String
+  listingId     String
+  scheduledTime DateTime?
+  status        InspectionStatus        @default(PENDING)
+  paymentStatus InspectionPaymentStatus @default(UNPAID)
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  listing       Listing                 @relation(fields: [listingId], references: [id])
+  tenant        User                    @relation(fields: [tenantId], references: [id])
+}
+
+enum InspectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum InspectionPaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  userId       String
+  inspectionId String?
+  amount       Int
+  type         String
+  status       String   @default("PENDING")
+  reference    String   @unique
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  TENANT
+  AGENT
+  LANDLORD
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
